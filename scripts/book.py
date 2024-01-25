@@ -87,7 +87,7 @@ def insert_book_to_notion(books, index, bookId):
     if book.get("newRatingDetail") and book.get("newRatingDetail").get("myRating"):
         book["Grade"] = rating.get(book.get("newRatingDetail").get("myRating"))
     elif status == "Read":
-        book["Grade"] = ""
+        book["Grade"] = "-"
     date = None
     if book.get("finishedDate"):
         date = book.get("finishedDate")
