@@ -118,24 +118,24 @@ def get_callout(content, style, colorStyle, reviewId):
     # 根据不同的划线样式设置不同的emoji 直线type=0 背景颜色是1 波浪线是2
     emoji = "〰️"
     if style == 0:
-        emoji = "💡"
+        emoji = "➰"
     elif style == 1:
-        emoji = "⭐"
+        emoji = "➿"
     # 如果reviewId不是空说明是笔记
     if reviewId != None:
         emoji = "✍️"
     color = "default"
     # 根据划线颜色设置文字的颜色
     if colorStyle == 1:
-        color = "red"
+        color = "red_background"
     elif colorStyle == 2:
-        color = "purple"
+        color = "purple_background"
     elif colorStyle == 3:
-        color = "blue"
+        color = "blue_background"
     elif colorStyle == 4:
-        color = "green"
+        color = "green_background"
     elif colorStyle == 5:
-        color = "yellow"
+        color = "yellow_background"
     return {
         "type": "callout",
         "callout": {
@@ -166,10 +166,10 @@ def format_time(time):
     result = ""
     hour = time // 3600
     if hour > 0:
-        result += f"{hour}时"
+        result += f"{hour}h"
     minutes = time % 3600 // 60
     if minutes > 0:
-        result += f"{minutes}分"
+        result += f"{minutes}min"
     return result
 
 
