@@ -216,7 +216,7 @@ class NotionHelper:
         response = self.client.databases.query(database_id=id, filter=filter)
         if len(response.get("results")) == 0:
             parent = {"database_id": id, "type": "database_id"}
-            properties[""Title"] = get_title(name)
+            properties["Title"] = get_title(name)
             page_id = self.client.pages.create(
                 parent=parent, properties=properties, icon=get_icon(icon)
             ).get("id")
