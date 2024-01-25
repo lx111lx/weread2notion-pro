@@ -135,7 +135,7 @@ class WeReadApi:
                     "chapterIdx": 1000000,
                     "updateTime": 1683825006,
                     "readAhead": 0,
-                    "title": "点评",
+                    "title": "Comment",
                     "level": 1,
                 }
             )
