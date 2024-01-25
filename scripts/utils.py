@@ -122,14 +122,14 @@ def get_quote(content):
 
 def get_callout(content, style, colorStyle, reviewId):
     # 根据不同的划线样式设置不同的emoji 直线type=0 背景颜色是1 波浪线是2
-    emoji = WAVELINE_ICON_URL
+    icon = WAVELINE_ICON_URL
     if style == 0:
         emoji = STRAIGHTLINE_ICON_URL
     elif style == 1:
-        emoji = FILLING_ICON_URL
+        icon = FILLING_ICON_URL
     # 如果reviewId不是空说明是笔记
     if reviewId != None:
-        emoji = NOTE_ICON_URL
+        icon = NOTE_ICON_URL
     """
     emoji = "〰️"
     if style == 0:
@@ -163,7 +163,8 @@ def get_callout(content, style, colorStyle, reviewId):
                     },
                 }
             ],
-            "icon": {"emoji": emoji},
+            #"icon": {"icon": icon},
+            "icon": icon,
             "color": color,
         },
     }
