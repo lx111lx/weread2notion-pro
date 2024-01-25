@@ -9,7 +9,6 @@ STATUS = "status"
 TITLE = "title"
 SELECT = "select"
 
-"""
 TAG_ICON_URL = "https://www.notion.so/icons/tag_gray.svg"
 USER_ICON_URL = "https://www.notion.so/icons/user-circle-filled_gray.svg"
 BOOK_ICON_URL = "https://www.notion.so/icons/book_gray.svg"
@@ -17,6 +16,7 @@ BOOK_ICON_URL = "https://www.notion.so/icons/book_gray.svg"
 TAG_ICON_URL = None
 USER_ICON_URL = None
 BOOK_ICON_URL = None
+"""
 
 book_properties_type_dict = {
     "BooksName":TITLE,
