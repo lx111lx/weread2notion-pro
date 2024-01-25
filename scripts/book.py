@@ -13,10 +13,8 @@ from config import (
     book_properties_type_dict,
 )
 from retrying import retry
+from config import TAG_ICON_URL, USER_ICON_URL, BOOK_ICON_URL
 
-TAG_ICON_URL = "https://www.notion.so/icons/tag_gray.svg"
-USER_ICON_URL = "https://www.notion.so/icons/user-circle-filled_gray.svg"
-BOOK_ICON_URL = "https://www.notion.so/icons/book_gray.svg"
 
 rating = {"poor": "⭐️", "fair": "⭐️⭐️⭐️", "good": "⭐️⭐️⭐️⭐️⭐️"}
 
@@ -88,7 +86,7 @@ def insert_book_to_notion(books, index, bookId):
     book["评分"] = book.get("newRating")
     if book.get("newRatingDetail") and book.get("newRatingDetail").get("myRating"):
         book["我的评分"] = rating.get(book.get("newRatingDetail").get("myRating"))
-    elif status=="已读":
+    elif status == "已读":
         book["我的评分"] = "未评分"
     date = None
     if book.get("finishedDate"):

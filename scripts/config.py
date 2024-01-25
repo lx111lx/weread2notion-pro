@@ -9,6 +9,10 @@ STATUS = "status"
 TITLE = "title"
 SELECT = "select"
 
+TAG_ICON_URL = "https://www.notion.so/icons/tag_gray.svg"
+USER_ICON_URL = "https://www.notion.so/icons/user-circle-filled_gray.svg"
+BOOK_ICON_URL = "https://www.notion.so/icons/book_gray.svg"
+
 book_properties_type_dict = {
     "书名":TITLE,
     "BookId":RICH_TEXT,
