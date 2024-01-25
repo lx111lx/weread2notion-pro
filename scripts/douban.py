@@ -10,16 +10,16 @@ import utils
 DOUBAN_API_HOST = os.getenv("DOUBAN_API_HOST", "frodo.douban.com")
 DOUBAN_API_KEY = os.getenv("DOUBAN_API_KEY", "0ac44ae016490db2204ce0a042db2916")
 rating = {
-    1: "⭐️",
-    2: "⭐️⭐️",
-    3: "⭐️⭐️⭐️",
-    4: "⭐️⭐️⭐️⭐️",
-    5: "⭐️⭐️⭐️⭐️⭐️",
+    1: "🟊",
+    2: "🟊🟊",
+    3: "🟊🟊🟊",
+    4: "🟊🟊🟊🟊",
+    5: "🟊🟊🟊🟊🟊",
 }
 status = {
-    "mark": "想读",
-    "doing": "在读",
-    "done": "已读",
+    "mark": "Wishlist",
+    "doing": "Reading",
+    "done": "Read",
 }
 AUTH_TOKEN = os.getenv("AUTH_TOKEN")
 headers = {
@@ -81,21 +81,21 @@ if __name__ == "__main__":
                         properties=properties,
                     )
                     continue
-            book["豆瓣链接"] = url
-            book["书名"] = subject.get("title")
-            book["简介"] = subject.get("intro")
-            book["豆瓣短评"] = comment
-            book["阅读状态"] = status.get(subject.get("status"))
+            book["Douban"] = url
+            book["BooksName"] = subject.get("title")
+            book["Synopsis"] = subject.get("intro")
+            book["Comment"] = comment
+            book["Status"] = status.get(subject.get("status"))
             if result.get("rating"):
-                book["我的评分"] = rating(result.get("rating").get("value"))
-            book["作者"] = [
+                book["Grade"] = rating(result.get("rating").get("value"))
+            book["Author"] = [
                 notion_helper.get_relation_id(
                     x, notion_helper.author_database_id, USER_ICON_URL
                 )
                 for x in subject.get("author")
             ]
             if len(result.get("tags")) > 0:
-                book["分类"] = [
+                book["Categories"] = [
                     notion_helper.get_relation_id(
                         x, notion_helper.category_database_id, TAG_ICON_URL
                     )
@@ -105,13 +105,13 @@ if __name__ == "__main__":
             dt = pendulum.from_format(
                 result.get("create_time"), date_format, tz="Asia/Shanghai"
             )
-            book["日期"] = dt.int_timestamp
-            book["封面"] = subject.get("cover_url")
+            book["Date"] = dt.int_timestamp
+            book["Cover"] = subject.get("cover_url")
             properties = utils.get_properties(book, book_properties_type_dict)
-            if book.get("日期"):
+            if book.get("Date"):
                 notion_helper.get_date_relation(
                     properties,
-                    pendulum.from_timestamp(book.get("日期"), tz="Asia/Shanghai"),
+                    pendulum.from_timestamp(book.get("Date"), tz="Asia/Shanghai"),
                 )
             parent = {"database_id": notion_helper.book_database_id, "type": "database_id"}
             notion_helper.create_page(
