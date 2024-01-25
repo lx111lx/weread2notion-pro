@@ -18,7 +18,7 @@ from utils import (
 
 def get_bookmark_list(page_id, bookId):
     """获取我的划线"""
-    filter = {"property": "书籍", "relation": {"contains": page_id}}
+    filter = {"property": "Books", "relation": {"contains": page_id}}
     results = notion_helper.query_all_by_book(
         notion_helper.bookmark_database_id, filter
     )
@@ -41,7 +41,7 @@ def get_bookmark_list(page_id, bookId):
 
 def get_review_list(page_id,bookId):
     """获取笔记"""
-    filter = {"property": "书籍", "relation": {"contains": page_id}}
+    filter = {"property": "Books", "relation": {"contains": page_id}}
     results = notion_helper.query_all_by_book(notion_helper.review_database_id, filter)
     dict1 = {
         get_rich_text_from_result(x, "reviewId"): get_rich_text_from_result(
@@ -130,7 +130,7 @@ def sort_notes(page_id, chapter, bookmark_list):
 
     notes = []
     if chapter != None:
-        filter = {"property": "书籍", "relation": {"contains": page_id}}
+        filter = {"property": "Books", "relation": {"contains": page_id}}
         results = notion_helper.query_all_by_book(
             notion_helper.chapter_database_id, filter
         )
