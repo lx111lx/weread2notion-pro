@@ -30,16 +30,16 @@ BOOKMARK_ICON_URL = "https://www.notion.so/icons/bookmark_gray.svg"
 
 class NotionHelper:
     database_name_dict = {
-        "BOOK_DATABASE_NAME": "书架",
-        "REVIEW_DATABASE_NAME": "笔记",
-        "BOOKMARK_DATABASE_NAME": "划线",
-        "DAY_DATABASE_NAME": "日",
-        "WEEK_DATABASE_NAME": "周",
-        "MONTH_DATABASE_NAME": "月",
-        "YEAR_DATABASE_NAME": "年",
-        "CATEGORY_DATABASE_NAME": "分类",
-        "AUTHOR_DATABASE_NAME": "作者",
-        "CHAPTER_DATABASE_NAME": "章节",
+        "BOOK_DATABASE_NAME": "BookShelf",
+        "REVIEW_DATABASE_NAME": "Notes",
+        "BOOKMARK_DATABASE_NAME": "Underline",
+        "DAY_DATABASE_NAME": "Day",
+        "WEEK_DATABASE_NAME": "Week",
+        "MONTH_DATABASE_NAME": "Month",
+        "YEAR_DATABASE_NAME": "Year",
+        "CATEGORY_DATABASE_NAME": "Categories",
+        "AUTHOR_DATABASE_NAME": "Author",
+        "CHAPTER_DATABASE_NAME": "Section",
     }
     database_id_dict = {}
     image_dict = {}
@@ -119,30 +119,30 @@ class NotionHelper:
         properties = response.get("properties")
         update_properties = {}
         if (
-            properties.get("阅读时长") is None
-            or properties.get("阅读时长").get("type") != "number"
+            properties.get("ReadTime") is None
+            or properties.get("ReadTime").get("type") != "number"
         ):
-            update_properties["阅读时长"] = {"number": {}}
+            update_properties["ReadTime"] = {"number": {}}
         if (
-            properties.get("书架分类") is None
-            or properties.get("书架分类").get("type") != "select"
+            properties.get("BookShelf") is None
+            or properties.get("BookShelf").get("type") != "select"
         ):
-            update_properties["书架分类"] = {"select": {}}
+            update_properties["BookShelf"] = {"select": {}}
         if (
-            properties.get("豆瓣链接") is None
-            or properties.get("豆瓣链接").get("type") != "url"
+            properties.get("Douban") is None
+            or properties.get("Douban").get("type") != "url"
         ):
-            update_properties["豆瓣链接"] = {"url": {}}
+            update_properties["Douban"] = {"url": {}}
         if (
-            properties.get("我的评分") is None
-            or properties.get("我的评分").get("type") != "select"
+            properties.get("Grade") is None
+            or properties.get("Grade").get("type") != "select"
         ):
-            update_properties["我的评分"] = {"select": {}}
+            update_properties["Grade"] = {"select": {}}
         if (
-            properties.get("豆瓣短评") is None
-            or properties.get("豆瓣短评").get("type") != "rich_text"
+            properties.get("Comment") is None
+            or properties.get("Comment").get("type") != "rich_text"
         ):
-            update_properties["豆瓣短评"] = {"rich_text": {}}
+            update_properties["Comment"] = {"rich_text": {}}
         """NeoDB先不添加了，现在受众还不广，可能有的小伙伴不知道是干什么的"""
         # if properties.get("NeoDB链接") is None or properties.get("NeoDB链接").get("type") != "url":
         #     update_properties["NeoDB链接"] = {"url": {}}
@@ -186,10 +186,10 @@ class NotionHelper:
         timestamp = (new_date - timedelta(hours=8)).timestamp()
         day = new_date.strftime("%Y年%m月%d日")
         properties = {
-            "日期": get_date(format_date(date)),
-            "时间戳": get_number(timestamp),
+            "Date": get_date(format_date(date)),
+            "TimeStamp": get_number(timestamp),
         }
-        properties["年"] = get_relation(
+        properties["Year"] = get_relation(
             [
                 self.get_year_relation_id(new_date),
             ]
@@ -199,7 +199,7 @@ class NotionHelper:
                 self.get_month_relation_id(new_date),
             ]
         )
-        properties["周"] = get_relation(
+        properties["Week"] = get_relation(
             [
                 self.get_week_relation_id(new_date),
             ]
@@ -212,11 +212,11 @@ class NotionHelper:
         key = f"{id}{name}"
         if key in self.__cache:
             return self.__cache.get(key)
-        filter = {"property": "标题", "title": {"equals": name}}
+        filter = {"property": "Title", "title": {"equals": name}}
         response = self.client.databases.query(database_id=id, filter=filter)
         if len(response.get("results")) == 0:
             parent = {"database_id": id, "type": "database_id"}
-            properties["标题"] = get_title(name)
+            properties[""Title"] = get_title(name)
             page_id = self.client.pages.create(
                 parent=parent, properties=properties, icon=get_icon(icon)
             ).get("id")
@@ -284,7 +284,7 @@ class NotionHelper:
             "readAhead": {"number": chapter.get("readAhead")},
             "updateTime": {"number": chapter.get("updateTime")},
             "level": {"number": chapter.get("level")},
-            "书籍": {"relation": [{"id": id}]},
+            "Books": {"relation": [{"id": id}]},
         }
         parent = {"database_id": self.chapter_database_id, "type": "database_id"}
         self.create_page(parent, properties, icon)
@@ -342,14 +342,14 @@ class NotionHelper:
             bookId = get_property_value(result.get("properties").get("BookId"))
             books_dict[bookId] = {
                 "pageId": result.get("id"),
-                "readingTime": get_property_value(result.get("properties").get("阅读时长")),
-                "category": get_property_value(result.get("properties").get("书架分类")),
+                "readingTime": get_property_value(result.get("properties").get("ReadTime")),
+                "category": get_property_value(result.get("properties").get("BookShelf")),
                 "Sort": get_property_value(result.get("properties").get("Sort")),
-                "douban_url": get_property_value(result.get("properties").get("豆瓣链接")),
-                "cover": get_property_value(result.get("properties").get("封面")),
-                "myRating": get_property_value(result.get("properties").get("我的评分")),
-                "comment": get_property_value(result.get("properties").get("豆瓣短评")),
-                "status": get_property_value(result.get("properties").get("阅读状态")),
+                "douban_url": get_property_value(result.get("properties").get("Douban")),
+                "cover": get_property_value(result.get("properties").get("Cover")),
+                "myRating": get_property_value(result.get("properties").get("Grade")),
+                "comment": get_property_value(result.get("properties").get("Comment")),
+                "status": get_property_value(result.get("properties").get("Status")),
             }
         return books_dict
 
