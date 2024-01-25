@@ -19,6 +19,12 @@ from config import (
 )
 import pendulum
 
+NOTE_ICON_URL = "https://www.notion.so/icons/thinking_lightgray"
+STRAIGHTLINE_ICON_URL = "https://www.notion.so/icons/priority-mid_lightgray.svg"
+WAVELINE_ICON_URL = "https://www.notion.so/icons/aquarius_lightgray.svg"
+FILLING_ICON_URL = "https://www.notion.so/icons/die1_lightgray.svg"
+
+
 MAX_LENGTH = (
     1024  # NOTION 2000个字符限制https://developers.notion.com/reference/request-limits
 )
@@ -116,6 +122,15 @@ def get_quote(content):
 
 def get_callout(content, style, colorStyle, reviewId):
     # 根据不同的划线样式设置不同的emoji 直线type=0 背景颜色是1 波浪线是2
+    icon = {"type": "external", "external": {"url": WAVELINE_ICON_URL}}
+    if style == 0:
+        icon = {"type": "external", "external": {"url": STRAIGHTLINE_ICON_URL}}
+    elif style == 1:
+        icon = {"type": "external", "external": {"url":FILLING_ICON_URL}}
+    # 如果reviewId不是空说明是笔记
+    if reviewId != None:
+        icon = {"type": "external", "external": {"url": NOTE_ICON_URL}}
+    """
     emoji = "〰️"
     if style == 0:
         emoji = "➰"
@@ -124,6 +139,7 @@ def get_callout(content, style, colorStyle, reviewId):
     # 如果reviewId不是空说明是笔记
     if reviewId != None:
         emoji = "✍️"
+    """
     color = "default"
     # 根据划线颜色设置文字的颜色
     if colorStyle == 1:
