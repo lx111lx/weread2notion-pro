@@ -22,7 +22,6 @@ from utils import (
     get_property_value,
 )
 
-"""
 TAG_ICON_URL = "https://www.notion.so/icons/tag_gray.svg"
 USER_ICON_URL = "https://www.notion.so/icons/user-circle-filled_gray.svg"
 TARGET_ICON_URL = "https://www.notion.so/icons/target_red.svg"
@@ -32,6 +31,7 @@ TAG_ICON_URL = None
 USER_ICON_URL = None
 TARGET_ICON_URL = None
 BOOKMARK_ICON_URL = None
+"""
 
 class NotionHelper:
     database_name_dict = {
