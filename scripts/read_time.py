@@ -14,21 +14,21 @@ from utils import format_date, get_date, get_icon, get_number, get_relation, get
 def insert_to_notion(page_id,timestamp,duration):
     parent = {"database_id": notion_helper.day_database_id, "type": "database_id"}
     properties = {
-        "标题": get_title(format_date(datetime.utcfromtimestamp(timestamp)+timedelta(hours=8),"%Y年%m月%d日")),
-        "日期": get_date(start = format_date(datetime.utcfromtimestamp(timestamp)+timedelta(hours=8))),
-        "时长": get_number(duration),
-        "时间戳": get_number(timestamp),
-        "年":get_relation(
+        "Title": get_title(format_date(datetime.utcfromtimestamp(timestamp)+timedelta(hours=8),"%Y年%m月%d日")),
+        "Date": get_date(start = format_date(datetime.utcfromtimestamp(timestamp)+timedelta(hours=8))),
+        "ReadTime": get_number(duration),
+        "TimeStamp": get_number(timestamp),
+        "Year":get_relation(
             [
                 notion_helper.get_year_relation_id(datetime.utcfromtimestamp(timestamp)+timedelta(hours=8)),
             ]
         ),
-        "月":get_relation(
+        "Month":get_relation(
             [
                 notion_helper.get_month_relation_id(datetime.utcfromtimestamp(timestamp)+timedelta(hours=8)),
             ]
         ),
-        "周":get_relation(
+        "Week":get_relation(
             [
                 notion_helper.get_week_relation_id(datetime.utcfromtimestamp(timestamp)+timedelta(hours=8)),
             ]
@@ -74,8 +74,8 @@ if __name__ == "__main__":
     readTimes = dict(sorted(readTimes.items()))
     results =  notion_helper.query_all(database_id=notion_helper.day_database_id)
     for result in results:
-        timestamp = result.get("properties").get("时间戳").get("number")
-        duration = result.get("properties").get("时长").get("number")
+        timestamp = result.get("properties").get("TimeStamp").get("number")
+        duration = result.get("properties").get("ReadTime").get("number")
         id = result.get("id")
         if(timestamp in readTimes):
             value = readTimes.pop(timestamp)
