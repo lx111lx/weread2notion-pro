@@ -243,7 +243,7 @@ class NotionHelper:
             "colorStyle": get_number(bookmark.get("colorStyle")),
             "type": get_number(bookmark.get("type")),
             "style": get_number(bookmark.get("style")),
-            "书籍": get_relation([id]),
+            "Books": get_relation([id]),
         }
         if "createTime" in bookmark:
             create_time = timestamp_to_date(int(bookmark.get("createTime")))
@@ -263,7 +263,8 @@ class NotionHelper:
             "chapterUid": get_number(review.get("chapterUid")),
             "bookVersion": get_number(review.get("bookVersion")),
             "type": get_number(review.get("type")),
-            "书籍": get_relation([id]),
+            "Books": get_relation([id]),
+            #"书籍": get_relation([id]),
         }
         if "range" in review:
             properties["range"] = get_rich_text(review.get("range"))
