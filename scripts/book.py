@@ -46,7 +46,7 @@ def insert_book_to_notion(books, index, bookId):
     """插入Book到Notion"""
     book = {}
     if bookId in archive_dict:
-        book["书架分类"] = archive_dict.get(bookId)
+        book["BookShelf"] = archive_dict.get(bookId)
     if bookId in notion_books:
         book.update(notion_books.get(bookId))
     bookInfo = weread_api.get_bookinfo(bookId)
@@ -85,9 +85,9 @@ def insert_book_to_notion(books, index, bookId):
     book["ReadDays"] = book.get("totalReadDay")
     book["Scores"] = book.get("newRating")
     if book.get("newRatingDetail") and book.get("newRatingDetail").get("myRating"):
-        book["我的评分"] = rating.get(book.get("newRatingDetail").get("myRating"))
+        book["Grade"] = rating.get(book.get("newRatingDetail").get("myRating"))
     elif status == "Read":
-        book["我的评分"] = "未评分"
+        book["Grade"] = ""
     date = None
     if book.get("finishedDate"):
         date = book.get("finishedDate")
