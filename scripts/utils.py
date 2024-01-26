@@ -120,7 +120,7 @@ def get_quote(content):
     }
 
 
-def get_callout(content, style, colorStyle, reviewId, icon):
+def get_callout(content, style, colorStyle, reviewId):
     # 根据不同的划线样式设置不同的emoji 直线type=0 背景颜色是1 波浪线是2
     icon = WAVELINE_ICON_URL
     if style == 0:
@@ -163,8 +163,8 @@ def get_callout(content, style, colorStyle, reviewId, icon):
                     },
                 }
             ],
-            "icon": {"image": icon},
-            #"icon": icon,
+            #"icon": {"image": icon},
+            "icon": icon,
             "color": color,
         },
     }
