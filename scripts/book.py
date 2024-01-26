@@ -16,7 +16,7 @@ from retrying import retry
 from config import TAG_ICON_URL, USER_ICON_URL, BOOK_ICON_URL
 
 #我加的，用于书籍页面的icon
-BOOOK_ICON_URL = "https://www.notion.so/icons/chemistry_brown.svg"
+BOOKADD_ICON_URL = "https://www.notion.so/icons/chemistry_brown.svg"
 
 
 rating = {"poor": "🟊", "fair": "🟊🟊🟊", "good": "🟊🟊🟊🟊🟊"}
@@ -134,7 +134,7 @@ def insert_book_to_notion(books, index, bookId):
             page_id=notion_books.get(bookId).get("pageId"),
             properties=properties,
             #源代码icon=utils.get_icon(book.get("cover")),
-            icon=utils.get_icon(BOOOK_ICON_URL),
+            icon=utils.get_icon(BOOKADD_ICON_URL),
             #我加的，定义小字号和宽屏页面
             fontsize=14,
             margin=96,
@@ -144,7 +144,7 @@ def insert_book_to_notion(books, index, bookId):
             parent=parent,
             properties=properties,
             #源代码icon=utils.get_icon(book.get("cover")),
-            icon=utils.get_icon(BOOOK_ICON_URL),
+            icon=utils.get_icon(BOOKADD_ICON_URL),
             fontsize=14,
             margin=96,
         )
