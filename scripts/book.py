@@ -136,8 +136,8 @@ def insert_book_to_notion(books, index, bookId):
             #源代码icon=utils.get_icon(book.get("cover")),
             icon=utils.get_icon(BOOOK_ICON_URL),
             #我加的，定义小字号和宽屏页面
-            font-size = small,
-            margin-width: 96px,
+            font size = small,
+            layout = layout-wide,
         )
     else:
         notion_helper.create_page(
@@ -146,7 +146,7 @@ def insert_book_to_notion(books, index, bookId):
             #源代码icon=utils.get_icon(book.get("cover")),
             icon=utils.get_icon(BOOOK_ICON_URL),
             font-size = small,
-            margin-width: 96px,
+            layout = layout-wide,
         )
 
 
