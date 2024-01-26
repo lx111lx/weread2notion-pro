@@ -16,7 +16,7 @@ from retrying import retry
 from config import TAG_ICON_URL, USER_ICON_URL, BOOK_ICON_URL
 
 #我加的，用于书籍页面的icon
-BOOKADD_ICON_URL = "https://www.notion.so/icons/chemistry_brown.svg"
+BOOKADD_ICON_URL = "https://www.notion.so/icons/coffee_lightgray.svg"
 
 
 rating = {"poor": "🟊", "fair": "🟊🟊🟊", "good": "🟊🟊🟊🟊🟊"}
