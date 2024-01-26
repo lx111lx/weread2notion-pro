@@ -38,7 +38,7 @@ def insert_to_notion(page_id,timestamp,duration):
     if page_id!=None:
         notion_helper.client.pages.update(page_id=page_id, properties=properties)
     else:
-        notion_helper.client.pages.create(parent=parent,icon = get_icon("https://www.notion.so/icons/wall_lightgray.svg"),properties=properties)
+        notion_helper.client.pages.create(parent=parent,icon = get_icon("https://www.notion.so/icons/video-game-classic_lightgray.svg"),properties=properties)
 
 
 def get_file():
