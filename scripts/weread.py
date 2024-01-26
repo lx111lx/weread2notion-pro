@@ -215,6 +215,7 @@ def content_to_block(content):
             content.get("style"),
             content.get("colorStyle"),
             content.get("reviewId"),
+            content.get("icon"),#我加的
         )
     elif "reviewId" in content:
         return get_callout(
@@ -222,6 +223,7 @@ def content_to_block(content):
             content.get("style"),
             content.get("colorStyle"),
             content.get("reviewId"),
+            content.get("icon"),#我加的
         )
     else:
         return get_heading(content.get("level"), content.get("title"))
