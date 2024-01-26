@@ -19,11 +19,47 @@ from config import (
 )
 import pendulum
 
-NOTE_ICON_URL = "https://www.notion.so/icons/thinking_lightgray"
-STRAIGHTLINE_ICON_URL = "https://www.notion.so/icons/priority-mid_lightgray.svg"
-WAVELINE_ICON_URL = "https://www.notion.so/icons/aquarius_lightgray.svg"
-FILLING_ICON_URL = "https://www.notion.so/icons/die1_lightgray.svg"
+#灰色图标
+NOTE_GRAY_ICON_URL = "https://www.notion.so/icons/thinking_lightgray.svg"
+STRAIGHTLINE_GRAY_ICON_URL = "https://www.notion.so/icons/priority-mid_lightgray.svg"
+WAVELINE_GRAY_ICON_URL = "https://www.notion.so/icons/aquarius_lightgray.svg"
+FILLING_GRAY_ICON_URL = "https://www.notion.so/icons/die1_lightgray.svg"
 
+#棕色图标（默认）
+NOTE_BROWN_ICON_URL = "https://www.notion.so/icons/thinking_brown.svg"
+STRAIGHTLINE_BROWN_ICON_URL = "https://www.notion.so/icons/priority-mid_brown.svg"
+WAVELINE_BROWN_ICON_URL = "https://www.notion.so/icons/aquarius_brown.svg"
+FILLING_BROWN_ICON_URL = "https://www.notion.so/icons/die1_brown.svg"
+
+#红色图标
+NOTE_RED_ICON_URL = "https://www.notion.so/icons/thinking_red.svg"
+STRAIGHTLINE_RED_ICON_URL = "https://www.notion.so/icons/priority-mid_red.svg"
+WAVELINE_RED_ICON_URL = "https://www.notion.so/icons/aquarius_red.svg"
+FILLING_RED_ICON_URL = "https://www.notion.so/icons/die1_red.svg"
+
+#紫色图标
+NOTE_PURPLE_ICON_URL = "https://www.notion.so/icons/thinking_purple.svg"
+STRAIGHTLINE_PURPLE_ICON_URL = "https://www.notion.so/icons/priority-mid_purple.svg"
+WAVELINE_PURPLE_ICON_URL = "https://www.notion.so/icons/aquarius_purple.svg"
+FILLING_PURPLE_ICON_URL = "https://www.notion.so/icons/die1_purple.svg"
+
+#蓝色图标
+NOTE_BLUE_ICON_URL = "https://www.notion.so/icons/thinking_blue.svg"
+STRAIGHTLINE_BLUE_ICON_URL = "https://www.notion.so/icons/priority-mid_blue.svg"
+WAVELINE_BLUE_ICON_URL = "https://www.notion.so/icons/aquarius_blue.svg"
+FILLING_BLUE_ICON_URL = "https://www.notion.so/icons/die1_blue.svg"
+
+#绿色图标
+NOTE_GREEN_ICON_URL = "https://www.notion.so/icons/thinking_green.svg"
+STRAIGHTLINE_GREEN_ICON_URL = "https://www.notion.so/icons/priority-mid_green.svg"
+WAVELINE_GREEN_ICON_URL = "https://www.notion.so/icons/aquarius_green.svg"
+FILLING_GREEN_ICON_URL = "https://www.notion.so/icons/die1_green.svg"
+
+#黄色图标
+NOTE_YELLOW_ICON_URL = "https://www.notion.so/icons/thinking_yellow.svg"
+STRAIGHTLINE_YELLOW_ICON_URL = "https://www.notion.so/icons/priority-mid_yellow.svg"
+WAVELINE_YELLOW_ICON_URL = "https://www.notion.so/icons/aquarius_yellow.svg"
+FILLING_YELLOW_ICON_URL = "https://www.notion.so/icons/die1_yellow.svg"
 
 MAX_LENGTH = (
     1024  # NOTION 2000个字符限制https://developers.notion.com/reference/request-limits
@@ -122,6 +158,7 @@ def get_quote(content):
 
 def get_callout(content, style, colorStyle, reviewId):
     # 根据不同的划线样式设置不同的emoji 直线type=0 背景颜色是1 波浪线是2
+    """
     icon = get_icon(WAVELINE_ICON_URL)
     if style == 0:
         icon =  get_icon(STRAIGHTLINE_ICON_URL)
@@ -130,7 +167,7 @@ def get_callout(content, style, colorStyle, reviewId):
     # 如果reviewId不是空说明是笔记
     if reviewId != None:
         icon =  get_icon(NOTE_ICON_URL)
-    """
+    
     emoji = "〰️"
     if style == 0:
         emoji = "➰"
@@ -140,18 +177,64 @@ def get_callout(content, style, colorStyle, reviewId):
     if reviewId != None:
         emoji = "✍️"
     """
-    color = "default"
+    
+    color = "brown_background"
     # 根据划线颜色设置文字的颜色
     if colorStyle == 1:
         color = "red_background"
+        icon = get_icon(WAVELINE_RED_ICON_URL)
+            if style == 0:
+                icon =  get_icon(STRAIGHTLINE_RED_ICON_URL)
+            elif style == 1:
+                icon =  get_icon(FILLING_RED_ICON_URL)
+            # 如果reviewId不是空说明是笔记
+            if reviewId != None:
+                icon =  get_icon(NOTE_RED_ICON_URL)
+        
     elif colorStyle == 2:
         color = "purple_background"
+        icon = get_icon(WAVELINE_PURPLE_ICON_URL)
+            if style == 0:
+                icon =  get_icon(STRAIGHTLINE_PURPLE_ICON_URL)
+            elif style == 1:
+                icon =  get_icon(FILLING_PURPLE_ICON_URL)
+            # 如果reviewId不是空说明是笔记
+            if reviewId != None:
+                icon =  get_icon(NOTE_PURPLE_ICON_URL)
+        
     elif colorStyle == 3:
         color = "blue_background"
+        icon = get_icon(WAVELINE_BLUE_ICON_URL)
+            if style == 0:
+                icon =  get_icon(STRAIGHTLINE_BLUE_ICON_URL)
+            elif style == 1:
+                icon =  get_icon(FILLING_BLUE_ICON_URL)
+            # 如果reviewId不是空说明是笔记
+            if reviewId != None:
+                icon =  get_icon(NOTE_BLUE_ICON_URL)
+        
     elif colorStyle == 4:
         color = "green_background"
+        icon = get_icon(WAVELINE_GREEN_ICON_URL)
+            if style == 0:
+                icon =  get_icon(STRAIGHTLINE_GREEN_ICON_URL)
+            elif style == 1:
+                icon =  get_icon(FILLING_GREEN_ICON_URL)
+            # 如果reviewId不是空说明是笔记
+            if reviewId != None:
+                icon =  get_icon(NOTE_GREEN_ICON_URL)
+        
     elif colorStyle == 5:
         color = "yellow_background"
+        icon = get_icon(WAVELINE_YELLOW_ICON_URL)
+            if style == 0:
+                icon =  get_icon(STRAIGHTLINE_YELLOW_ICON_URL)
+            elif style == 1:
+                icon =  get_icon(FILLING_YELLOW_ICON_URL)
+            # 如果reviewId不是空说明是笔记
+            if reviewId != None:
+                icon =  get_icon(NOTE_YELLOW_ICON_URL)
+        
     return {
         "type": "callout",
         "callout": {
@@ -163,7 +246,6 @@ def get_callout(content, style, colorStyle, reviewId):
                     },
                 }
             ],
-            #"icon": {"image": icon},
             "icon": icon,
             "color": color,
         },
