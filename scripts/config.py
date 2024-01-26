@@ -14,7 +14,7 @@ TAG_ICON_URL = "https://www.notion.so/icons/tag_gray.svg"
 USER_ICON_URL = "https://www.notion.so/icons/user-circle-filled_gray.svg"
 BOOK_ICON_URL = "https://www.notion.so/icons/book_gray.svg"
 """
-TAG_ICON_URL = "https://www.notion.so/icons/bug_lightgray.svg"
+TAG_ICON_URL = "https://www.notion.so/icons/magnet_lightgray.svg"
 USER_ICON_URL = "https://www.notion.so/icons/conceal_lightgray.svg"
 BOOK_ICON_URL = "https://www.notion.so/icons/coffee_lightgray.svg"
 
