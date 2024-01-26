@@ -199,7 +199,7 @@ class NotionHelper:
                 self.get_year_relation_id(new_date),
             ]
         )
-        properties["月"] = get_relation(
+        properties["Month"] = get_relation(
             [
                 self.get_month_relation_id(new_date),
             ]
@@ -394,22 +394,22 @@ class NotionHelper:
         return results
 
     def get_date_relation(self, properties, date):
-        properties["年"] = get_relation(
+        properties["Year"] = get_relation(
             [
                 self.get_year_relation_id(date),
             ]
         )
-        properties["月"] = get_relation(
+        properties["Month"] = get_relation(
             [
                 self.get_month_relation_id(date),
             ]
         )
-        properties["周"] = get_relation(
+        properties["Week"] = get_relation(
             [
                 self.get_week_relation_id(date),
             ]
         )
-        properties["日"] = get_relation(
+        properties["Day"] = get_relation(
             [
                 self.get_day_relation_id(date),
             ]
