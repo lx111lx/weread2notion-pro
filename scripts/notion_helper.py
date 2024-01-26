@@ -30,8 +30,8 @@ BOOKMARK_ICON_URL = "https://www.notion.so/icons/bookmark_gray.svg"
 """
 TAG_ICON_URL = "https://www.notion.so/icons/bug_lightgray.svg"
 USER_ICON_URL = "https://www.notion.so/icons/conceal_lightgray.svg"
-TARGET_ICON_URL = "https://www.notion.so/icons/calendar-month_orange.svg"
-BOOKMARK_ICON_URL = "https://www.notion.so/icons/coffee_lightgray.svg"
+TARGET_ICON_URL = "https://www.notion.so/icons/video-game-classic_lightgray.svg"
+BOOKMARK_ICON_URL = "https://www.notion.so/icons/barcode_lightgray.svg"
 
 class NotionHelper:
     database_name_dict = {
