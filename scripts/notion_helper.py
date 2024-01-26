@@ -250,8 +250,8 @@ class NotionHelper:
             properties["Date"] = get_date(create_time.strftime("%Y-%m-%d %H:%M:%S"))
             self.get_date_relation(properties,create_time)
         parent = {"database_id": self.bookmark_database_id, "type": "database_id"}
-        #self.create_page(parent, properties, icon)
-        self.create_page(parent, properties, icon, fontsize, margin)
+        self.create_page(parent, properties, icon)
+        #self.create_page(parent, properties, icon, fontsize, margin)
 
     def insert_review(self, id, review):
         time.sleep(0.1)
@@ -278,8 +278,8 @@ class NotionHelper:
             properties["Date"] = get_date(create_time.strftime("%Y-%m-%d %H:%M:%S"))
             self.get_date_relation(properties, create_time)
         parent = {"database_id": self.review_database_id, "type": "database_id"}
-        #self.create_page(parent, properties, icon)
-        self.create_page(parent, properties, icon, fontsize, margin)
+        self.create_page(parent, properties, icon)
+        #self.create_page(parent, properties, icon, fontsize, margin)
 
     def insert_chapter(self, id, chapter):
         time.sleep(0.1)
@@ -295,8 +295,8 @@ class NotionHelper:
             "Books": {"relation": [{"id": id}]},
         }
         parent = {"database_id": self.chapter_database_id, "type": "database_id"}
-        #self.create_page(parent, properties, icon)
-        self.create_page(parent, properties, icon, fontsize, margin)
+        self.create_page(parent, properties, icon)
+        #self.create_page(parent, properties, icon, fontsize, margin)
 
     @retry(stop_max_attempt_number=3, wait_fixed=5000)
     def update_book_page(self, page_id, properties):
@@ -315,8 +315,8 @@ class NotionHelper:
         )
 
     @retry(stop_max_attempt_number=3, wait_fixed=5000)
-    #def create_page(self, parent, properties, icon):
-    def create_page(self, parent, properties, icon, fontsize, margin):
+    def create_page(self, parent, properties, icon):
+    #def create_page(self, parent, properties, icon, fontsize, margin):
         return self.client.pages.create(parent=parent, properties=properties, icon=icon)
 
     @retry(stop_max_attempt_number=3, wait_fixed=5000)
