@@ -179,10 +179,10 @@ def get_callout(content, style, colorStyle, reviewId):
     """
     
     color = "brown_background"
+    icon = get_icon(WAVELINE_RED_ICON_URL)
     # 根据划线颜色设置文字的颜色
     if colorStyle == 1:
         color = "red_background"
-        icon = get_icon(WAVELINE_RED_ICON_URL)
         if style == 0:
             icon =  get_icon(STRAIGHTLINE_RED_ICON_URL)
         elif style == 1:
@@ -192,7 +192,6 @@ def get_callout(content, style, colorStyle, reviewId):
             icon =  get_icon(NOTE_RED_ICON_URL)
         
     elif colorStyle == 2:
-        color = "purple_background"
         icon = get_icon(WAVELINE_PURPLE_ICON_URL)
         if style == 0:
             icon =  get_icon(STRAIGHTLINE_PURPLE_ICON_URL)
@@ -203,7 +202,6 @@ def get_callout(content, style, colorStyle, reviewId):
             icon =  get_icon(NOTE_PURPLE_ICON_URL)
         
     elif colorStyle == 3:
-        color = "blue_background"
         icon = get_icon(WAVELINE_BLUE_ICON_URL)
         if style == 0:
             icon =  get_icon(STRAIGHTLINE_BLUE_ICON_URL)
@@ -214,7 +212,6 @@ def get_callout(content, style, colorStyle, reviewId):
             icon =  get_icon(NOTE_BLUE_ICON_URL)
         
     elif colorStyle == 4:
-        color = "green_background"
         icon = get_icon(WAVELINE_GREEN_ICON_URL)
         if style == 0:
             icon =  get_icon(STRAIGHTLINE_GREEN_ICON_URL)
@@ -225,7 +222,6 @@ def get_callout(content, style, colorStyle, reviewId):
             icon =  get_icon(NOTE_GREEN_ICON_URL)
         
     elif colorStyle == 5:
-        color = "yellow_background"
         icon = get_icon(WAVELINE_YELLOW_ICON_URL)
         if style == 0:
             icon =  get_icon(STRAIGHTLINE_YELLOW_ICON_URL)
