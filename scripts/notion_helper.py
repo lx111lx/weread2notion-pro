@@ -40,7 +40,8 @@ class NotionHelper:
         "BOOKMARK_DATABASE_NAME": "Underline",
         "DAY_DATABASE_NAME": "Day",
         "WEEK_DATABASE_NAME": "Week",
-        "MONTH_DATABASE_NAME": "Month",
+        #"MONTH_DATABASE_NAME": "Month",
+        "MONTH_DATABASE_NAME": "Month View",
         "YEAR_DATABASE_NAME": "Year",
         "CATEGORY_DATABASE_NAME": "Categories",
         "AUTHOR_DATABASE_NAME": "Author",
@@ -217,11 +218,11 @@ class NotionHelper:
         key = f"{id}{name}"
         if key in self.__cache:
             return self.__cache.get(key)
-        filter = {"property": "Title", "title": {"equals": name}}
+        filter = {"property": "Month Name", "title": {"equals": name}}
         response = self.client.databases.query(database_id=id, filter=filter)
         if len(response.get("results")) == 0:
             parent = {"database_id": id, "type": "database_id"}
-            properties["Title"] = get_title(name)
+            properties["Month Name"] = get_title(name)
             page_id = self.client.pages.create(
                 parent=parent, properties=properties, icon=get_icon(icon)
             ).get("id")
