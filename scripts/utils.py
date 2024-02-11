@@ -155,92 +155,129 @@ def get_quote(content):
         },
     }
 
-
-def get_callout(content, style, colorStyle, reviewId):
-    # 根据不同的划线样式设置不同的emoji 直线type=0 背景颜色是1 波浪线是2
-    # 初始设置默认图标为棕色背景对应的图标
-    icon = get_icon(FILLING_BROWN_ICON_URL)  # 假设默认样式为填充
-    
-    # 根据划线颜色设置文字的颜色和默认图标
-    if colorStyle == 1:
-        color = "red_background"
-        icon = get_icon(WAVELINE_RED_ICON_URL)
-    elif colorStyle == 2:
-        color = "purple_background"
-        icon = get_icon(WAVELINE_PURPLE_ICON_URL)
-    elif colorStyle == 3:
-        color = "blue_background"
-        icon = get_icon(WAVELINE_BLUE_ICON_URL)
-    elif colorStyle == 4:
-        color = "green_background"
-        icon = get_icon(WAVELINE_GREEN_ICON_URL)
-    elif colorStyle == 5:
-        color = "yellow_background"
-        icon = get_icon(WAVELINE_YELLOW_ICON_URL)
-    else:
-        color = "gray_background"  # 如果没有匹配的colorStyle，使用默认的灰色背景
-    
-    # 根据style调整图标
-    if style == 0:
-        if colorStyle == 1:
-            icon = get_icon(STRAIGHTLINE_RED_ICON_URL)
-        elif colorStyle == 2:
-            icon = get_icon(STRAIGHTLINE_PURPLE_ICON_URL)
-        elif colorStyle == 3:
-            icon = get_icon(STRAIGHTLINE_BLUE_ICON_URL)
-        elif colorStyle == 4:
-            icon = get_icon(STRAIGHTLINE_GREEN_ICON_URL)
-        elif colorStyle == 5:
-            icon = get_icon(STRAIGHTLINE_YELLOW_ICON_URL)
-        else:
-            # 默认棕色图标已经在最初设置，这里不需要再次设置
-            pass
-    elif style == 1:
-        if colorStyle == 1:
-            icon = get_icon(FILLING_RED_ICON_URL)
-        elif colorStyle == 2:
-            icon = get_icon(FILLING_PURPLE_ICON_URL)
-        elif colorStyle == 3:
-            icon = get_icon(FILLING_BLUE_ICON_URL)
-        elif colorStyle == 4:
-            icon = get_icon(FILLING_GREEN_ICON_URL)
-        elif colorStyle == 5:
-            icon = get_icon(FILLING_YELLOW_ICON_URL)
-        else:
-            icon = get_icon(FILLING_BROWN_ICON_URL)
-    
-    # 如果reviewId不是空说明是笔记，根据颜色调整图标
-    if reviewId is not None:
-        if colorStyle == 1:
-            icon = get_icon(NOTE_RED_ICON_URL)
-        elif colorStyle == 2:
-            icon = get_icon(NOTE_PURPLE_ICON_URL)
-        elif colorStyle == 3:
-            icon = get_icon(NOTE_BLUE_ICON_URL)
-        elif colorStyle == 4:
-            icon = get_icon(NOTE_GREEN_ICON_URL)
-        elif colorStyle == 5:
-            icon = get_icon(NOTE_YELLOW_ICON_URL)
-        else:
-            icon = get_icon(NOTE_BROWN_ICON_URL)
-
-    
-        
-    return {
-        "type": "callout",
-        "callout": {
-            "rich_text": [
-                {
-                    "type": "text",
-                    "text": {
-                        "content": content[:MAX_LENGTH],
-                    },
-                }
-            ],
-            "icon": icon,
-            "color": color,
-        },
+#加入划线样式更新逻辑
+def get_database_pages(database_id, notion_token):
+    """查询数据库获取所有页面的ID"""
+    url = f"https://api.notion.com/v1/databases/{database_id}/query"
+    headers = {
+        "Authorization": f"Bearer {notion_token}",
+        "Notion-Version": "2022-06-28",
     }
+    response = requests.post(url, headers=headers)
+    if response.status_code == 200:
+        return [page["id"] for page in response.json()["results"]]
+    else:
+        print("Error fetching database pages")
+        return []
+
+def get_page_callouts(page_id, notion_token):
+    """获取页面中所有Callout块的ID"""
+    url = f"https://api.notion.com/v1/blocks/{page_id}/children"
+    headers = {
+        "Authorization": f"Bearer {notion_token}",
+        "Notion-Version": "2021-05-13",
+    }
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        # 筛选出类型为callout的块
+        callouts = [block["id"] for block in response.json()["results"] if block["type"] == "callout"]
+        return callouts
+    else:
+        print("Error fetching page callouts")
+        return []
+
+# 示例：遍历数据库中的所有页面，获取并更新Callout块
+page_ids = get_database_pages(NOTION_PAGE, NOTION_TOKEN)
+for page_id in page_ids:
+    callout_ids = get_page_callouts(page_id, NOTION_TOKEN)
+    for callout_id in callout_ids:
+        # 在这里实现更新Callout样式的逻辑
+        def get_callout(content, style, colorStyle, reviewId):
+            # 根据不同的划线样式设置不同的emoji 直线type=0 背景颜色是1 波浪线是2
+            # 初始设置默认图标为棕色背景对应的图标
+            icon = get_icon(FILLING_BROWN_ICON_URL)  # 假设默认样式为填充
+            
+            # 根据划线颜色设置文字的颜色和默认图标
+            if colorStyle == 1:
+                color = "red_background"
+                icon = get_icon(WAVELINE_RED_ICON_URL)
+            elif colorStyle == 2:
+                color = "purple_background"
+                icon = get_icon(WAVELINE_PURPLE_ICON_URL)
+            elif colorStyle == 3:
+                color = "blue_background"
+                icon = get_icon(WAVELINE_BLUE_ICON_URL)
+            elif colorStyle == 4:
+                color = "green_background"
+                icon = get_icon(WAVELINE_GREEN_ICON_URL)
+            elif colorStyle == 5:
+                color = "yellow_background"
+                icon = get_icon(WAVELINE_YELLOW_ICON_URL)
+            else:
+                color = "gray_background"  # 如果没有匹配的colorStyle，使用默认的灰色背景
+            
+            # 根据style调整图标
+            if style == 0:
+                if colorStyle == 1:
+                    icon = get_icon(STRAIGHTLINE_RED_ICON_URL)
+                elif colorStyle == 2:
+                    icon = get_icon(STRAIGHTLINE_PURPLE_ICON_URL)
+                elif colorStyle == 3:
+                    icon = get_icon(STRAIGHTLINE_BLUE_ICON_URL)
+                elif colorStyle == 4:
+                    icon = get_icon(STRAIGHTLINE_GREEN_ICON_URL)
+                elif colorStyle == 5:
+                    icon = get_icon(STRAIGHTLINE_YELLOW_ICON_URL)
+                else:
+                    # 默认棕色图标已经在最初设置，这里不需要再次设置
+                    pass
+            elif style == 1:
+                if colorStyle == 1:
+                    icon = get_icon(FILLING_RED_ICON_URL)
+                elif colorStyle == 2:
+                    icon = get_icon(FILLING_PURPLE_ICON_URL)
+                elif colorStyle == 3:
+                    icon = get_icon(FILLING_BLUE_ICON_URL)
+                elif colorStyle == 4:
+                    icon = get_icon(FILLING_GREEN_ICON_URL)
+                elif colorStyle == 5:
+                    icon = get_icon(FILLING_YELLOW_ICON_URL)
+                else:
+                    icon = get_icon(FILLING_BROWN_ICON_URL)
+            
+            # 如果reviewId不是空说明是笔记，根据颜色调整图标
+            if reviewId is not None:
+                if colorStyle == 1:
+                    icon = get_icon(NOTE_RED_ICON_URL)
+                elif colorStyle == 2:
+                    icon = get_icon(NOTE_PURPLE_ICON_URL)
+                elif colorStyle == 3:
+                    icon = get_icon(NOTE_BLUE_ICON_URL)
+                elif colorStyle == 4:
+                    icon = get_icon(NOTE_GREEN_ICON_URL)
+                elif colorStyle == 5:
+                    icon = get_icon(NOTE_YELLOW_ICON_URL)
+                else:
+                    icon = get_icon(NOTE_BROWN_ICON_URL)
+        
+            
+                
+            return {
+                "type": "callout",
+                "callout": {
+                    "rich_text": [
+                        {
+                            "type": "text",
+                            "text": {
+                                "content": content[:MAX_LENGTH],
+                            },
+                        }
+                    ],
+                    "icon": icon,
+                    "color": color,
+                },
+            }
+        print(f"Found Callout block with ID {callout_id} in page {page_id}")
 
 
 def get_rich_text_from_result(result, name):
