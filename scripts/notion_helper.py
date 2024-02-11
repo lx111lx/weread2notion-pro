@@ -22,12 +22,6 @@ from utils import (
     get_property_value,
 )
 
-"""
-TAG_ICON_URL = "https://www.notion.so/icons/tag_gray.svg"
-USER_ICON_URL = "https://www.notion.so/icons/user-circle-filled_gray.svg"
-TARGET_ICON_URL = "https://www.notion.so/icons/target_red.svg"
-BOOKMARK_ICON_URL = "https://www.notion.so/icons/bookmark_gray.svg"
-"""
 TAG_ICON_URL = "https://www.notion.so/icons/magnet_lightgray.svg"
 USER_ICON_URL = "https://www.notion.so/icons/conceal_lightgray.svg"
 TARGET_ICON_URL = "https://www.notion.so/icons/video-game-classic_lightgray.svg"
@@ -40,8 +34,8 @@ class NotionHelper:
         "BOOKMARK_DATABASE_NAME": "Underline",
         "DAY_DATABASE_NAME": "Day",
         "WEEK_DATABASE_NAME": "Week",
-        #"MONTH_DATABASE_NAME": "Month",
-        "MONTH_DATABASE_NAME": "Month View",
+        "MONTH_DATABASE_NAME": "Month",
+        #"MONTH_DATABASE_NAME": "Month View",
         "YEAR_DATABASE_NAME": "Year",
         "CATEGORY_DATABASE_NAME": "Categories",
         "AUTHOR_DATABASE_NAME": "Author",
