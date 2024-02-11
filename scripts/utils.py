@@ -159,7 +159,7 @@ def get_quote(content):
 def get_callout(content, style, colorStyle, reviewId):
     # 根据不同的划线样式设置不同的emoji 直线type=0 背景颜色是1 波浪线是2
     # 初始设置默认图标为棕色背景对应的图标
-    icon = get_icon(STRAIGHTLINE_BROWN_ICON_URL)  # 假设默认样式为直线
+    icon = get_icon(FILLING_GRAY_ICON_URL)  # 假设默认样式为直线
     
     # 根据划线颜色设置文字的颜色和默认图标
     if colorStyle == 1:
