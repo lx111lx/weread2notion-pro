@@ -158,78 +158,73 @@ def get_quote(content):
 
 def get_callout(content, style, colorStyle, reviewId):
     # 根据不同的划线样式设置不同的emoji 直线type=0 背景颜色是1 波浪线是2
-    """
-    icon = get_icon(WAVELINE_ICON_URL)
-    if style == 0:
-        icon =  get_icon(STRAIGHTLINE_ICON_URL)
-    elif style == 1:
-        icon =  get_icon(FILLING_ICON_URL)
-    # 如果reviewId不是空说明是笔记
-    if reviewId != None:
-        icon =  get_icon(NOTE_ICON_URL)
+    # 初始设置默认图标为棕色背景对应的图标
+    icon = get_icon(STRAIGHTLINE_BROWN_ICON_URL)  # 假设默认样式为直线
     
-    emoji = "〰️"
-    if style == 0:
-        emoji = "➰"
-    elif style == 1:
-        emoji = "➿"
-    # 如果reviewId不是空说明是笔记
-    if reviewId != None:
-        emoji = "✍️"
-    """
-    
-    color = "brown_background"
-    icon = get_icon(WAVELINE_RED_ICON_URL)
-    # 根据划线颜色设置文字的颜色
+    # 根据划线颜色设置文字的颜色和默认图标
     if colorStyle == 1:
         color = "red_background"
-        if style == 0:
-            icon =  get_icon(STRAIGHTLINE_RED_ICON_URL)
-        elif style == 1:
-            icon =  get_icon(FILLING_RED_ICON_URL)
-        # 如果reviewId不是空说明是笔记
-        if reviewId != None:
-            icon =  get_icon(NOTE_RED_ICON_URL)
-        
+        icon = get_icon(WAVELINE_RED_ICON_URL)
     elif colorStyle == 2:
+        color = "purple_background"
         icon = get_icon(WAVELINE_PURPLE_ICON_URL)
-        if style == 0:
-            icon =  get_icon(STRAIGHTLINE_PURPLE_ICON_URL)
-        elif style == 1:
-            icon =  get_icon(FILLING_PURPLE_ICON_URL)
-        # 如果reviewId不是空说明是笔记
-        if reviewId != None:
-            icon =  get_icon(NOTE_PURPLE_ICON_URL)
-        
     elif colorStyle == 3:
+        color = "blue_background"
         icon = get_icon(WAVELINE_BLUE_ICON_URL)
-        if style == 0:
-            icon =  get_icon(STRAIGHTLINE_BLUE_ICON_URL)
-        elif style == 1:
-            icon =  get_icon(FILLING_BLUE_ICON_URL)
-        # 如果reviewId不是空说明是笔记
-        if reviewId != None:
-            icon =  get_icon(NOTE_BLUE_ICON_URL)
-        
     elif colorStyle == 4:
+        color = "green_background"
         icon = get_icon(WAVELINE_GREEN_ICON_URL)
-        if style == 0:
-            icon =  get_icon(STRAIGHTLINE_GREEN_ICON_URL)
-        elif style == 1:
-            icon =  get_icon(FILLING_GREEN_ICON_URL)
-            # 如果reviewId不是空说明是笔记
-        if reviewId != None:
-            icon =  get_icon(NOTE_GREEN_ICON_URL)
-        
     elif colorStyle == 5:
+        color = "yellow_background"
         icon = get_icon(WAVELINE_YELLOW_ICON_URL)
-        if style == 0:
-            icon =  get_icon(STRAIGHTLINE_YELLOW_ICON_URL)
-        elif style == 1:
-            icon =  get_icon(FILLING_YELLOW_ICON_URL)
-        # 如果reviewId不是空说明是笔记
-        if reviewId != None:
-            icon =  get_icon(NOTE_YELLOW_ICON_URL)
+    else:
+        color = "brown_background"  # 如果没有匹配的colorStyle，使用默认的棕色背景
+    
+    # 根据style调整图标
+    if style == 0:
+        if colorStyle == 1:
+            icon = get_icon(STRAIGHTLINE_RED_ICON_URL)
+        elif colorStyle == 2:
+            icon = get_icon(STRAIGHTLINE_PURPLE_ICON_URL)
+        elif colorStyle == 3:
+            icon = get_icon(STRAIGHTLINE_BLUE_ICON_URL)
+        elif colorStyle == 4:
+            icon = get_icon(STRAIGHTLINE_GREEN_ICON_URL)
+        elif colorStyle == 5:
+            icon = get_icon(STRAIGHTLINE_YELLOW_ICON_URL)
+        else:
+            # 默认棕色直线图标已经在最初设置，这里不需要再次设置
+            pass
+    elif style == 1:
+        if colorStyle == 1:
+            icon = get_icon(FILLING_RED_ICON_URL)
+        elif colorStyle == 2:
+            icon = get_icon(FILLING_PURPLE_ICON_URL)
+        elif colorStyle == 3:
+            icon = get_icon(FILLING_BLUE_ICON_URL)
+        elif colorStyle == 4:
+            icon = get_icon(FILLING_GREEN_ICON_URL)
+        elif colorStyle == 5:
+            icon = get_icon(FILLING_YELLOW_ICON_URL)
+        else:
+            icon = get_icon(FILLING_BROWN_ICON_URL)
+    
+    # 如果reviewId不是空说明是笔记，根据颜色调整图标
+    if reviewId is not None:
+        if colorStyle == 1:
+            icon = get_icon(NOTE_RED_ICON_URL)
+        elif colorStyle == 2:
+            icon = get_icon(NOTE_PURPLE_ICON_URL)
+        elif colorStyle == 3:
+            icon = get_icon(NOTE_BLUE_ICON_URL)
+        elif colorStyle == 4:
+            icon = get_icon(NOTE_GREEN_ICON_URL)
+        elif colorStyle == 5:
+            icon = get_icon(NOTE_YELLOW_ICON_URL)
+        else:
+            icon = get_icon(NOTE_BROWN_ICON_URL)
+
+    
         
     return {
         "type": "callout",
