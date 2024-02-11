@@ -48,6 +48,3 @@ jobs:
       - name: weread sync
         run: |
           python -u scripts/weread.py
-      - name: book sync
-        run: |
-          python -u scripts/utils.py
