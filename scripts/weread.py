@@ -69,7 +69,106 @@ def check(bookId):
     if len(response["results"]) > 0:
         return response["results"][0]["id"]
     return None
+"""
+def update_callout_style(content, style, colorStyle, reviewId):
+"""检查插入的callout样式是否与目标样式一致"""
+    callout_color = None
+    if color == "red_background" and colorStyle == 1:
+        pass
+    elif color == "purple_background" and colorStyle == 2:
+        pass
+    elif color == "blue_background" and colorStyle == 3:
+        pass
+    elif color == "green_background" and colorStyle == 4:
+        pass
+    elif color == "yellow_background" and colorStyle == 5:
+        pass
+    else:
+        callout_color = color
+    
+    callout_icon = None
+    if style == 0:
+        if colorStyle == 1 and icon == get_icon(STRAIGHTLINE_RED_ICON_URL):
+            pass
+        elif colorStyle == 2 and icon == get_icon(STRAIGHTLINE_PURPLE_ICON_URL):
+            pass
+        elif colorStyle == 3 and icon == get_icon(STRAIGHTLINE_BLUE_ICON_URL):
+            pass
+        elif colorStyle == 4 and icon == get_icon(STRAIGHTLINE_GREEN_ICON_URL):
+            pass
+        elif colorStyle == 5 and icon == get_icon(STRAIGHTLINE_YELLOW_ICON_URL):
+            pass
+        elif colorStyle == None and icon == get_icon(FILLING_BROWN_ICON_URL):
+            pass
+        else:
+            callout_icon = icon
 
+     elif style == 1:
+        if colorStyle == 1 and icon == get_icon(FILLING_RED_ICON_URL):
+            pass
+        elif colorStyle == 2 and icon == get_icon(FILLING_PURPLE_ICON_URL):
+            pass
+        elif colorStyle == 3 and icon == get_icon(FILLING_BLUE_ICON_URL):
+            pass
+        elif colorStyle == 4 and icon == get_icon(FILLING_GREEN_ICON_URL):
+            pass
+        elif colorStyle == 5 and icon == get_icon(FILLING_YELLOW_ICON_URL):
+            pass
+        elif colorStyle == None and icon == get_icon(FILLING_BROWN_ICON_URL):
+            pass
+        else:
+            callout_icon = icon
+
+      elif style == 2:
+        if colorStyle == 1 and icon == get_icon(WAVELINE_RED_ICON_URL):
+            pass
+        elif colorStyle == 2 and icon == get_icon(WAVELINE_PURPLE_ICON_URL):
+            pass
+        elif colorStyle == 3 and icon == get_icon(WAVELINE_BLUE_ICON_URL):
+            pass
+        elif colorStyle == 4 and icon == get_icon(WAVELINE_GREEN_ICON_URL):
+            pass
+        elif colorStyle == 5 and icon == get_icon(WAVELINE_YELLOW_ICON_URL):
+            pass
+        elif colorStyle == None and icon == get_icon(WAVELINE_BROWN_ICON_URL):
+            pass
+        else:
+            callout_icon = icon
+
+    if colorStyle == 1 and icon = get_icon(NOTE_RED_ICON_URL):
+        pass
+    elif colorStyle == 2 and icon == get_icon(NOTE_PURPLE_ICON_URL):
+        pass
+    elif colorStyle == 3 and icon == get_icon(NOTE_BLUE_ICON_URL):
+        pass
+    elif colorStyle == 4 and icon == get_icon(NOTE_GREEN_ICON_URL):
+        pass
+    elif colorStyle == 5 and icon == get_icon(NOTE_YELLOW_ICON_URL):
+        pass
+    elif colorStyle == None and icon == get_icon(NOTE_BROWN_ICON_URL):
+        pass
+    else:
+        callout_icon = icon
+
+    if callout_icon is not None or callout_color is not None:
+        return {
+            "type": "callout",
+            "callout": {
+                "rich_text": [
+                    {
+                        "type": "text",
+                        "text": {
+                            "content": content[:MAX_LENGTH],
+                        },
+                    }
+                ],
+                "icon": callout_icon,
+                "color": callout_color,
+            },
+        }
+    else:
+        pass
+"""
 
 def get_sort():
     """获取database中的最新时间"""
