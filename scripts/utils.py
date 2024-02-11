@@ -19,6 +19,9 @@ from config import (
 )
 import pendulum
 
+NOTION_TOKEN = os.getenv('NOTION_TOKEN')
+NOTION_DATABASE_ID = os.getenv('NOTION_PAGE')
+
 #灰色图标
 NOTE_GRAY_ICON_URL = "https://www.notion.so/icons/thinking_lightgray.svg"
 STRAIGHTLINE_GRAY_ICON_URL = "https://www.notion.so/icons/priority-mid_lightgray.svg"
@@ -175,7 +178,7 @@ def get_page_callouts(page_id, notion_token):
     url = f"https://api.notion.com/v1/blocks/{page_id}/children"
     headers = {
         "Authorization": f"Bearer {notion_token}",
-        "Notion-Version": "2021-05-13",
+        "Notion-Version": "2022-06-28",
     }
     response = requests.get(url, headers=headers)
     if response.status_code == 200:
@@ -187,7 +190,7 @@ def get_page_callouts(page_id, notion_token):
         return []
 
 # 示例：遍历数据库中的所有页面，获取并更新Callout块
-page_ids = get_database_pages(NOTION_PAGE, NOTION_TOKEN)
+page_ids = get_database_pages(NOTION_DATABASE_ID, NOTION_TOKEN)
 for page_id in page_ids:
     callout_ids = get_page_callouts(page_id, NOTION_TOKEN)
     for callout_id in callout_ids:
