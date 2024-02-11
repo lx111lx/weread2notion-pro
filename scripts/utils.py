@@ -192,7 +192,7 @@ def get_page_callouts(page_id, notion_token):
 # 先在for循环外部定义get_callout函数，否则其他文件导入不了这个函数
 
 def get_callout(content, style, colorStyle, reviewId):
-callout_block = get_callout(callout_content, callout_style, callout_colorStyle, callout_reviewId)
+    callout_block = get_callout(callout_content, callout_style, callout_colorStyle, callout_reviewId)
 
 # 遍历数据库中的所有页面，获取并更新Callout块，根据不同的划线样式设置不同的emoji 直线type=0 背景颜色是1 波浪线是2
 page_ids = get_database_pages(NOTION_DATABASE_ID, NOTION_TOKEN)
