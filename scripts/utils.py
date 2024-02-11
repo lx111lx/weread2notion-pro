@@ -193,7 +193,21 @@ def get_page_callouts(page_id, notion_token):
 
 def get_callout(content, style, colorStyle, reviewId):
     callout_block = get_callout(callout_content, callout_style, callout_colorStyle, callout_reviewId)
-
+    return {
+        "type": "callout",
+        "callout": {
+            "rich_text": [
+                {
+                    "type": "text",
+                    "text": {
+                        "content": content[:MAX_LENGTH],
+                    },
+                }
+            ],
+            "icon": icon,
+            "color": color,
+        },
+    }
 # 遍历数据库中的所有页面，获取并更新Callout块，根据不同的划线样式设置不同的emoji 直线type=0 背景颜色是1 波浪线是2
 page_ids = get_database_pages(NOTION_DATABASE_ID, NOTION_TOKEN)
 for page_id in page_ids:
@@ -265,24 +279,6 @@ for page_id in page_ids:
                 icon = get_icon(NOTE_YELLOW_ICON_URL)
             else:
                 icon = get_icon(NOTE_BROWN_ICON_URL)
-        
-        
-            
-        return {
-            "type": "callout",
-            "callout": {
-                "rich_text": [
-                    {
-                        "type": "text",
-                        "text": {
-                            "content": content[:MAX_LENGTH],
-                        },
-                    }
-                ],
-                "icon": icon,
-                "color": color,
-            },
-        }
         print(f"Found Callout block with ID {callout_id} in page {page_id}")
 
 
