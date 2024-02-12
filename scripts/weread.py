@@ -7,6 +7,7 @@ from weread_api import WeReadApi
 
 from notion_client import Client
 
+NOTION_TOKEN = os.getenv('NOTION_TOKEN')
 client = Client(auth = NOTION_TOKEN)
 
 from utils import (
