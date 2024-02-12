@@ -23,15 +23,14 @@ from utils import (
 
 
 def get_bookmark_list(page_id, bookId):
-    """获取我的划线"""
+    """获取我的划线，并删除Notion中存在，但微信读书中不存在的数据"""
     filter = {"property": "Books", "relation": {"contains": page_id}}
-
-    """notion_helper.query_all_by_book函数传入了两个参数，一个是查询到的数据库id，另一个是筛选条件"""
+    # notion_helper.query_all_by_book函数传入了两个参数，一个是查询到的数据库id，另一个是筛选条件
     results = notion_helper.query_all_by_book(
         notion_helper.bookmark_database_id, filter
     )
     """
-    从上面筛选到的结果中，以富文本的形式提取的"blockId"循环赋值给 同样提取到的"bookmarkId"，并将每次循环的键和值构建成一个临时字典
+    以上筛选出了所有基于Books关联属性，与书籍页面有关联的Underline页面的数据条目。接下来以富文本的形式提取了notion Property值"blockId"循环赋值给同样提取到的notion Property值"bookmarkId"，并将每次循环的键和值构建成一个临时字典
     """
     dict1 = {
         get_rich_text_from_result(x, "bookmarkId"): get_rich_text_from_result(
@@ -40,35 +39,34 @@ def get_bookmark_list(page_id, bookId):
         for x in results
     }
     """
-    将通过notion API获取到的"id"循环赋值给上面以富文本的形式提取的"blockId"，并将每次循环的键和值构建成一个临时字典
+    将通过notion API获取到的"id"值循环赋值给上面以富文本的形式获取的notion Property值"blockId"，并将每次循环的键和值构建成一个临时字典
     """
     dict2 = {get_rich_text_from_result(x, "blockId"): x.get("id") for x in results}
-    bookmarks = weread_api.get_bookmark_list(bookId)
+    bookmarks = weread_api.get_bookmark_list(bookId) # weread api获取的微信的书籍id
     for i in bookmarks:
         """
-        如果weread API获取到的"bookmarkId"键存在于从notion获取的临时字典dict1的键中，则从dict1中移除这个对应的键值对，
-        并且把这个键对值添加到临时的"i"字典中，其中键是"blockId"，值是从dict1中移除的值。
+        下面这个if语句：如果weread API获取到的"bookmarkId"值存在于从 notion 获取的临时字典 dict1 的中，则从 dict1 中移除这个书签对应的"blockId"值，
+        并且把这个移除的"blockId"值，赋值给i字典中的"blockId"键。这样临时字典i中存储的就是 dict1 中移除的"blockId"值，也就是"bookmarkId"中已经插入block的值，即已经插入Notion的书签。
         """
         if i.get("bookmarkId") in dict1:
             i["blockId"] = dict1.pop(i.get("bookmarkId"))
-    # 到这一步，dict1中剩余的都是Notion API没有获取到的blockID，接下来的循环就是把这些dict1里剩余的都从Notion里删除
     """ 原始代码
     for blockId in dict1.values():
         notion_helper.delete_block(blockId)
         notion_helper.delete_block(dict2.get(blockId))
     """
     # 我修改的，加了条件判断：在dict1中已经删除的，dict2不会再次删除
+    # 
     for blockId in dict1.values():
         notion_helper.delete_block(blockId)
         # 检查dict2中的blockId是否已经在dict1的删除操作中被处理
-        correspondingBlockId = dict2.get(blockId)
         if correspondingBlockId and correspondingBlockId not in dict1.values():
-            notion_helper.delete_block(correspondingBlockId)
+            notion_helper.delete_block(dict2.get(blockId))
     return bookmarks
 
 
 def get_review_list(page_id,bookId):
-    """获取笔记"""
+    """获取笔记，并删除Notion中存在，但微信读书中不存在的数据"""
     filter = {"property": "Books", "relation": {"contains": page_id}}
     results = notion_helper.query_all_by_book(notion_helper.review_database_id, filter)
     dict1 = {
@@ -325,7 +323,7 @@ def sort_notes(page_id, chapter, bookmark_list):
 
 def append_blocks(id, contents):
     print(f"笔记数{len(contents)}")
-    #插入目录？
+    #插入目录
     before_block_id = ""
     block_children = notion_helper.get_block_children(id)
     if len(block_children) > 0 and block_children[0].get("type") == "table_of_contents":
@@ -336,7 +334,7 @@ def append_blocks(id, contents):
         )
         before_block_id = response.get("results")[0].get("id")
 
-    #插入callout block内容？
+    #插入callout block内容
     blocks = []
     sub_contents = []
     l = []
