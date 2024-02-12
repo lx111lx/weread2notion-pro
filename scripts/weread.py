@@ -102,6 +102,109 @@ def check(bookId):
     return None
 
 
+def check_callout_or_notes_color(colorStyle):
+    # 检查已经插入的callout块的颜色是否匹配
+    if colorStyle == 1:
+        return "red_background"
+    elif colorStyle == 2:
+        return "purple_background"
+    elif colorStyle == 3:
+        return "blue_background"
+    elif colorStyle == 4:
+        return "green_background"
+    elif colorStyle == 5:
+        return "yellow_background"
+    else:
+        return "gray_background"  # 如果没有匹配的colorStyle，使用默认的灰色背景
+
+
+def check_callout_or_notes_icon(style, colorStyle, reviewId):
+    # 初始化icon变量为默认图标的URL
+    expect_icon_url = get_icon("FILLING_BROWN_ICON_URL")  # 假设这是默认图标的标识符
+
+    # 根据style和colorStyle选择图标
+    if style == 2:  # 波浪线
+        icon_map = {
+            1: "WAVELINE_RED_ICON_URL",
+            2: "WAVELINE_PURPLE_ICON_URL",
+            3: "WAVELINE_BLUE_ICON_URL",
+            4: "WAVELINE_GREEN_ICON_URL",
+            5: "WAVELINE_YELLOW_ICON_URL"
+        }
+        expect_icon_url = get_icon(icon_map.get(colorStyle, "FILLING_BROWN_ICON_URL"))
+    elif style == 0:  # 直线
+        icon_map = {
+            1: "STRAIGHTLINE_RED_ICON_URL",
+            2: "STRAIGHTLINE_PURPLE_ICON_URL",
+            3: "STRAIGHTLINE_BLUE_ICON_URL",
+            4: "STRAIGHTLINE_GREEN_ICON_URL",
+            5: "STRAIGHTLINE_YELLOW_ICON_URL"
+        }
+        expect_icon_url = get_icon(icon_map.get(colorStyle, "FILLING_BROWN_ICON_URL"))
+    elif style == 1:  # 填充
+        icon_map = {
+            1: "FILLING_RED_ICON_URL",
+            2: "FILLING_PURPLE_ICON_URL",
+            3: "FILLING_BLUE_ICON_URL",
+            4: "FILLING_GREEN_ICON_URL",
+            5: "FILLING_YELLOW_ICON_URL"
+        }
+        icon_url = get_icon(icon_map.get(colorStyle, "FILLING_BROWN_ICON_URL"))
+    
+    # 如果reviewId不是空说明是笔记，根据颜色调整图标
+    if reviewId is not None:
+        note_icon_map = {
+            1: "NOTE_RED_ICON_URL",
+            2: "NOTE_PURPLE_ICON_URL",
+            3: "NOTE_BLUE_ICON_URL",
+            4: "NOTE_GREEN_ICON_URL",
+            5: "NOTE_YELLOW_ICON_URL"
+        }
+        expect_icon_url = get_icon(note_icon_map.get(colorStyle, "NOTE_BROWN_ICON_URL"))
+    
+    return expect_icon_url  # 返回图标的URL字符串
+
+
+def update_callout_style_to_notion(page_id, bookId, content):
+    # 对样式不对的callout删除，然后重新插入notion
+    filter = {"property": "Books", "relation": {"contains": page_id}}
+    results = notion_helper.query_all_by_book(notion_helper.bookmark_database_id, filter)
+    
+    dict1 = {get_rich_text_from_result(x, "bookmarkId"): get_rich_text_from_result(x, "blockId") for x in results}
+    dict2 = {get_rich_text_from_result(x, "blockId"): x.get("id") for x in results}
+    
+    bookmarks = weread_api.get_bookmark_list(bookId)
+    chapter = weread_api.get_chapter_info(bookId)
+    pages_id_with_deleted_blocks = set()  # 存储有block被删除的页面ID
+
+    expect_icon_url = check_callout_or_notes_icon(content.get("style"), content.get("colorStyle"), content.get("reviewId"))
+    expect_color = check_callout_or_notes_color(content.get("colorStyle"))
+    
+    for i in bookmarks:
+        if i.get("bookmarkId") in dict1:
+            Notion_icon_url = i["icon"]['external']['url'] if 'icon' in i and 'external' in i['icon'] and 'url' in i['icon']['external'] else None
+            if i.get("color") == expect_color and Notion_icon_url == expect_icon_url:
+                # 样式匹配，不需要操作
+                pass
+            else:
+                # 样式不匹配，删除并准备重新插入
+                blockId = dict1.pop(i.get("bookmarkId"))
+                notion_helper.delete_block(blockId)
+                pages_id_with_deleted_blocks.add(page_id)  # 这里应该记录被删除blocks的页面ID
+                
+                if blockId in dict2:
+                    # 如果存在对应的blockId在dict2中，则也删除
+                    notion_helper.delete_block(dict2[blockId])
+
+    # 对所有有block被删除的页面ID进行更新
+    for page_id_to_update in pages_id_with_deleted_blocks:
+        bookmark_list = get_bookmark_list(page_id_to_update, bookId)
+        content = sort_notes(page_id_to_update, chapter, bookmark_list)
+        append_blocks(page_id_to_update, content)
+        # 更新书籍页面
+        notion_helper.update_book_page(page_id=page_id_to_update)
+
+
 def get_sort():
     """获取database中的最新时间"""
     filter = {"property": "Sort", "number": {"is_not_empty": True}}
@@ -307,6 +410,7 @@ if __name__ == "__main__":
             reviews = get_review_list(pageId,bookId)
             bookmark_list.extend(reviews)
             content = sort_notes(pageId, chapter, bookmark_list)
+            update_callout_style_to_notion(page_id, bookId, content)
             append_blocks(pageId, content)
             properties = {
                 "Sort":get_number(sort)
