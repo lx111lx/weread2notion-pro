@@ -5,6 +5,10 @@ import requests
 from notion_helper import NotionHelper
 from weread_api import WeReadApi
 
+from notion_client import Client
+
+client = Client(auth = NOTION_TOKEN)
+
 from utils import (
     get_callout,
     get_heading,
@@ -41,7 +45,7 @@ def get_bookmark_list(page_id, bookId):
     bookmarks = weread_api.get_bookmark_list(bookId)
     for i in bookmarks:
         """
-        如果notion API获取到的"bookmarkId"键存在临时字典dict1的键中，则从dict1中移除这个对应的键值对，
+        如果weread API获取到的"bookmarkId"键存在于从notion获取的临时字典dict1的键中，则从dict1中移除这个对应的键值对，
         并且把这个键对值添加到临时的"i"字典中，其中键是"blockId"，值是从dict1中移除的值。
         """
         if i.get("bookmarkId") in dict1:
@@ -103,7 +107,7 @@ def check(bookId):
     return None
 
 
-def check_callout_or_notes_color(colorStyle):
+def get_expect_color(colorStyle):
     # 检查已经插入的callout块的颜色是否匹配
     if colorStyle == 1:
         return "red_background"
@@ -119,7 +123,7 @@ def check_callout_or_notes_color(colorStyle):
         return "gray_background"  # 如果没有匹配的colorStyle，使用默认的灰色背景
 
 
-def check_callout_or_notes_icon(style, colorStyle, reviewId):
+def get_expect_icon(style, colorStyle, reviewId):
     # 初始化icon变量为默认图标的URL
     expect_icon_url = get_icon("FILLING_BROWN_ICON_URL")  # 假设这是默认图标的标识符
 
@@ -166,48 +170,66 @@ def check_callout_or_notes_icon(style, colorStyle, reviewId):
     return expect_icon_url  # 返回图标的URL字符串
 
 
-def get_icon_url(data):
-    return data.get("icon", {}).get("external", {}).get("url")
+def get_callout_icon(callout_id):
+    # 使用Notion客户端获取指定callout块的详细信息
+    block_details = client.blocks.retrieve(block_id=callout_id)
+    
+    # 初始化变量以存储callout块的icon URL
+    callout_icon_url = None
+
+    # 检查检索到的块是否为callout类型
+    if block_details["type"] == "callout":
+        # 如果callout块有icon属性，进一步检查icon类型
+        if "icon" in block_details["callout"]:
+            # 如果icon类型为外部链接，获取其URL
+            if block_details["callout"]["icon"]["type"] == "external":
+                callout_icon_url = block_details["callout"]["icon"]["external"]["url"]
+            # 如果icon类型为emoji，获取emoji字符
+            elif block_details["callout"]["icon"]["type"] == "emoji":
+                callout_icon_url = block_details["callout"]["icon"]["emoji"]
+    
+    # 返回callout块的icon URL或emoji字符
+    return callout_icon_url
+
+
+def get_callout_color(callout_id):
+    # 使用 Notion 客户端根据 callout_id 检索指定的 callout 块详情
+    block_details = client.blocks.retrieve(block_id=callout_id)
+    
+    # 初始化变量以存储 callout 块的背景颜色
+    callout_background = None
+    
+    # 检查检索到的块是否为 callout 类型并且具有颜色属性
+    if block_details["type"] == "callout" and "color" in block_details["callout"]:
+        # 获取 callout 块的背景颜色
+        callout_background = block_details["callout"]["color"]
+    
+    # 返回 callout 块的背景颜色
+    return callout_background
 
 
 def update_callout_style_to_notion(page_id, bookId, content):
     # 对样式不对的callout删除，然后重新插入notion
-    filter = {"property": "Books", "relation": {"contains": page_id}}
-    results = notion_helper.query_all_by_book(notion_helper.bookmark_database_id, filter)
-    
-    dict1 = {get_rich_text_from_result(x, "bookmarkId"): get_rich_text_from_result(x, "blockId") for x in results}
-    dict2 = {get_rich_text_from_result(x, "blockId"): x.get("id") for x in results}
-    
-    bookmarks = weread_api.get_bookmark_list(bookId)
-    chapter = weread_api.get_chapter_info(bookId)
-    pages_id_with_deleted_blocks = set()  # 存储有block被删除的页面ID
+    notion_token = NOTION_TOKEN
+    database_id = NOTION_PAGE
+    page_ids = get_database_pages(database_id, notion_token)
+    expect_icon_url = get_expect_icon(content.get("style"), content.get("colorStyle"), content.get("reviewId"))
+    expect_color = get_expect_color(content.get("colorStyle"))
 
-    expect_icon_url = check_callout_or_notes_icon(content.get("style"), content.get("colorStyle"), content.get("reviewId"))
-    expect_color = check_callout_or_notes_color(content.get("colorStyle"))
-    
-    for i in bookmarks:
-        if i.get("bookmarkId") in dict1:
-            Notion_icon_url = get_icon_url(i)
-            if i.get("color") == expect_color and Notion_icon_url == expect_icon_url:
-                # 样式匹配，不需要操作
-                pass
-            else:
-                # 样式不匹配，删除并准备重新插入
-                blockId = dict1.pop(i.get("bookmarkId"))
-                notion_helper.delete_block(blockId)
-                pages_id_with_deleted_blocks.add(page_id)  # 这里应该记录被删除blocks的页面ID
+    page_ids_to_update = set()  # 用于存储需要更新的页面ID
+
+    for page_id in page_ids:
+        callout_ids = get_page_callouts_id(page_id, notion_token)
+        for callout_id in callout_ids:
+            if get_callout_icon(callout_id, notion_token) != expect_icon_url or get_callout_color(callout_id, notion_token) != expect_color:
+                # 样式不匹配，删除块
+                notion_helper.delete_block(callout_id, notion_token)
+                # 记录下该块所在页面的ID
+                page_ids_to_update.add(page_id)
                 
-                if blockId in dict2:
-                    # 如果存在对应的blockId在dict2中，则也删除
-                    notion_helper.delete_block(dict2[blockId])
-
-    # 对所有有block被删除的页面ID进行更新
-    for page_id_to_update in pages_id_with_deleted_blocks:
-        bookmark_list = get_bookmark_list(page_id_to_update, bookId)
-        content = sort_notes(page_id_to_update, chapter, bookmark_list)
-        append_blocks(page_id_to_update, content)
-        # 更新书籍页面
-        notion_helper.update_book_page(page_id=page_id_to_update)
+    # 对所有需要更新的页面ID进行内容更新
+    for page_id_to_update in page_ids_to_update:
+        append_blocks(page_id_to_update, content, notion_token)
 
 
 def get_sort():
