@@ -410,7 +410,7 @@ if __name__ == "__main__":
             reviews = get_review_list(pageId,bookId)
             bookmark_list.extend(reviews)
             content = sort_notes(pageId, chapter, bookmark_list)
-            update_callout_style_to_notion(page_id, bookId, content)
+            update_callout_style_to_notion(pageId, bookId, content)
             append_blocks(pageId, content)
             properties = {
                 "Sort":get_number(sort)
