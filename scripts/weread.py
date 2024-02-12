@@ -166,6 +166,10 @@ def check_callout_or_notes_icon(style, colorStyle, reviewId):
     return expect_icon_url  # 返回图标的URL字符串
 
 
+def get_icon_url(data):
+    return data.get("icon", {}).get("external", {}).get("url")
+
+
 def update_callout_style_to_notion(page_id, bookId, content):
     # 对样式不对的callout删除，然后重新插入notion
     filter = {"property": "Books", "relation": {"contains": page_id}}
@@ -183,7 +187,7 @@ def update_callout_style_to_notion(page_id, bookId, content):
     
     for i in bookmarks:
         if i.get("bookmarkId") in dict1:
-            Notion_icon_url = i["icon"]['external']['url'] if 'icon' in i and 'external' in i['icon'] and 'url' in i['icon']['external'] else None
+            Notion_icon_url = get_icon_url(i)
             if i.get("color") == expect_color and Notion_icon_url == expect_icon_url:
                 # 样式匹配，不需要操作
                 pass
