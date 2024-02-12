@@ -194,21 +194,21 @@ def get_callout(content, style, colorStyle, reviewId):
     #根据不同的划线样式设置不同的emoji 直线type=0 背景颜色是1 波浪线是2
 
     icon = get_icon(FILLING_BROWN_ICON_URL)  #默认样式为填充
-    # 根据划线颜色设置文字的颜色和默认图标,callout_color是在这里定义的变量
+    # 根据划线颜色设置文字的颜色和默认图标,color是在这里定义的变量
     if colorStyle == 1:
-        callout_color = "red_background"
+        color = "red_background"
         icon = get_icon(WAVELINE_RED_ICON_URL)
     elif colorStyle == 2:
-        callout_color = "purple_background"
+        color = "purple_background"
         icon = get_icon(WAVELINE_PURPLE_ICON_URL)
     elif colorStyle == 3:
-        callout_color = "blue_background"
+        color = "blue_background"
         icon = get_icon(WAVELINE_BLUE_ICON_URL)
     elif colorStyle == 4:
-        callout_color = "green_background"
+        color = "green_background"
         icon = get_icon(WAVELINE_GREEN_ICON_URL)
     elif colorStyle == 5:
-        callout_color = "yellow_background"
+        color = "yellow_background"
         icon = get_icon(WAVELINE_YELLOW_ICON_URL)
     else:
         color = "gray_background"  # 如果没有匹配的colorStyle，使用默认的灰色背景
@@ -272,7 +272,7 @@ def get_callout(content, style, colorStyle, reviewId):
             "color": color,
         },
     }
-
+"""
 # 遍历数据库中的所有页面，获取并更新Callout块
 page_ids = get_database_pages(NOTION_DATABASE_ID, NOTION_TOKEN)
 for page_id in page_ids:
@@ -280,6 +280,7 @@ for page_id in page_ids:
     for callout_id in callout_ids:
         callout = get_callout(content, style, colorStyle, reviewId)
         print(f"Processed Callout block with ID {callout_id} in page {page_id}")
+"""
 
 def get_rich_text_from_result(result, name):
     return result.get("properties").get(name).get("rich_text")[0].get("plain_text")
