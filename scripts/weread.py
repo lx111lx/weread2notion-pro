@@ -13,6 +13,7 @@ from utils import (
     get_quote,
     get_rich_text_from_result,
     get_table_of_contents,
+    get_icon,
 )
 
 
